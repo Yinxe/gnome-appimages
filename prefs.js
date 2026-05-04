@@ -45,14 +45,21 @@ class DirectoryRow extends Adw.ActionRow {
 class AppImageRow extends Adw.ActionRow {
     static { GObject.registerClass(this); }
 
-    constructor(app, onSave) {
+    constructor(app, onSave, onRemove) {
         const label = app.label || app.name || app.filename || _('未命名');
+        const isEnabled = app.enabled !== false;
         super({
             title: label,
             subtitle: app.path,
         });
         this._app = app;
         this._onSave = onSave;
+        this._onRemove = onRemove;
+
+        if (!isEnabled) {
+            this.set_title(`${label}  (${_('已禁用')})`);
+            this.add_css_class('dim-label');
+        }
 
         const editButton = new Gtk.Button({
             icon_name: 'document-edit-symbolic',
@@ -62,6 +69,17 @@ class AppImageRow extends Adw.ActionRow {
         });
         editButton.connect('clicked', () => this._showEditDialog());
         this.add_suffix(editButton);
+
+        if (!isEnabled && this._onRemove) {
+            const removeButton = new Gtk.Button({
+                icon_name: 'edit-delete-symbolic',
+                valign: Gtk.Align.CENTER,
+                css_classes: ['flat'],
+                tooltip_text: _('删除'),
+            });
+            removeButton.connect('clicked', () => this._onRemove(this._app.id));
+            this.add_suffix(removeButton);
+        }
     }
 
     _showEditDialog() {
@@ -263,10 +281,19 @@ export default class AppImagesPreferences extends ExtensionPreferences {
             }
 
             for (const app of apps) {
-                const row = new AppImageRow(app, (id, updates) => {
-                    this._updateAppImage(id, updates);
-                    refreshApps();
-                });
+                const row = new AppImageRow(
+                    app,
+                    (id, updates) => {
+                        this._updateAppImage(id, updates);
+                        refreshApps();
+                    },
+                    app.enabled === false
+                        ? (id) => {
+                            this._removeAppImage(id);
+                            refreshApps();
+                        }
+                        : null
+                );
                 listBox.append(row);
             }
         };
@@ -323,6 +350,19 @@ export default class AppImagesPreferences extends ExtensionPreferences {
             }
         } catch (e) {
             log(`[AppImages] 更新应用失败: ${e.message}`);
+        }
+    }
+
+    _removeAppImage(id) {
+        try {
+            const apps = this._getAppImages();
+            const index = apps.findIndex(app => app.id === id);
+            if (index >= 0) {
+                apps.splice(index, 1);
+                this._getSettings().set_string('appimages-data', JSON.stringify(apps));
+            }
+        } catch (e) {
+            log(`[AppImages] 删除应用失败: ${e.message}`);
         }
     }
 }
