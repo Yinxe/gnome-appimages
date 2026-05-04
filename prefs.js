@@ -273,12 +273,15 @@ export default class AppImagesPreferences extends ExtensionPreferences {
 
         refreshApps();
 
+        const infoGroup = new Adw.PreferencesGroup({});
+        page.add(infoGroup);
+
         const infoLabel = new Gtk.Label({
             label: _('提示：修改保存后会自动同步到扩展菜单'),
             css_classes: ['dim-label', 'caption'],
             margin_top: 8,
         });
-        page.add(infoLabel);
+        infoGroup.add(infoLabel);
     }
 
     _getSettings() {
