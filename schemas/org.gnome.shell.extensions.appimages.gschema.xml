@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.appimages" path="/org/gnome/shell/extensions/appimages/">
+    <!-- 扫描目录列表，JSON格式: [{"path": "/home/user/applications", "enabled": true}] -->
+    <key name="scan-directories" type="s">
+      <default>'[{"path":"~/applications","enabled":true}]'</default>
+      <summary>扫描目录列表</summary>
+      <description>配置需要扫描AppImage的目录，支持环境变量和~/</description>
+    </key>
+
+    <!-- AppImage数据列表，JSON格式: [{"id":"...", "path":"...", "label":"...", "command":"...", "color":"...", "enabled":true}] -->
+    <key name="appimages-data" type="s">
+      <default>'[]'</default>
+      <summary>AppImage应用数据</summary>
+      <description>存储扫描到的AppImage应用的元数据信息</description>
+    </key>
+
+    <!-- 上次扫描时间 -->
+    <key name="last-scan-time" type="t">
+      <default>0</default>
+      <summary>上次扫描时间</summary>
+      <description>Unix时间戳，记录上次扫描的时间</description>
+    </key>
+  </schema>
+</schemalist>

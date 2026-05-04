@@ -1,8 +1,12 @@
 {
-  "name": "appimages",
-  "description": "appimages",
+  "name": "AppImage Manager",
+  "description": "管理和快速启动 AppImage 应用",
   "uuid": "appimages@yinxin",
+  "settings-schema": "org.gnome.shell.extensions.appimages",
   "shell-version": [
+    "45",
+    "46",
+    "47",
     "48"
   ]
 }
