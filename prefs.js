@@ -122,41 +122,22 @@ class AppImageRow extends Adw.ActionRow {
 
 export default class AppImagesPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
-        const stack = new Adw.ViewStack({ hexpand: true, vexpand: true });
-        const switcher = new Adw.ViewSwitcher({
-            policy: Adw.ViewSwitcherPolicy.WIDE,
-            stack: stack,
-        });
-        window.set_content(stack);
-        window.add(switcher);
-
-        this._buildScansPage(stack);
-        this._buildAppsPage(stack);
+        this._buildScansPage(window);
+        this._buildAppsPage(window);
     }
 
-    _buildScansPage(stack) {
-        const scrolled = new Gtk.ScrolledWindow({
-            hscrollbar_policy: Gtk.PolicyType.NEVER,
-            vscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
+    _buildScansPage(window) {
+        const page = new Adw.PreferencesPage({
+            title: _('扫描'),
+            icon_name: 'folder-open-symbolic',
         });
-        const contentBox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
-            spacing: 16,
-            margin_top: 16,
-            margin_bottom: 16,
-            margin_start: 16,
-            margin_end: 16,
-        });
-        scrolled.set_child(contentBox);
-
-        stack.add_titled(scrolled, 'scans', _('扫描'));
-        stack.get_page(scrolled).icon_name = 'folder-open-symbolic';
+        window.add(page);
 
         const dirsGroup = new Adw.PreferencesGroup({
             title: _('扫描目录'),
             description: _('配置需要扫描 AppImage 的目录，支持 ~/ 和环境变量'),
         });
-        contentBox.append(dirsGroup);
+        page.add(dirsGroup);
 
         const directories = this._getDirectories();
         const listBox = new Gtk.ListBox({
@@ -199,7 +180,7 @@ export default class AppImagesPreferences extends ExtensionPreferences {
         refreshList();
 
         const addGroup = new Adw.PreferencesGroup({ title: _('添加目录') });
-        contentBox.append(addGroup);
+        page.add(addGroup);
 
         const addBox = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
@@ -232,7 +213,7 @@ export default class AppImagesPreferences extends ExtensionPreferences {
         entry.connect('activate', () => addButton.activate());
 
         const actionGroup = new Adw.PreferencesGroup({});
-        contentBox.append(actionGroup);
+        page.add(actionGroup);
 
         const scanButton = new Gtk.Button({
             label: _('立即扫描所有目录'),
@@ -246,29 +227,18 @@ export default class AppImagesPreferences extends ExtensionPreferences {
         actionGroup.add(scanButton);
     }
 
-    _buildAppsPage(stack) {
-        const scrolled = new Gtk.ScrolledWindow({
-            hscrollbar_policy: Gtk.PolicyType.NEVER,
-            vscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
+    _buildAppsPage(window) {
+        const page = new Adw.PreferencesPage({
+            title: _('应用'),
+            icon_name: 'application-x-executable-symbolic',
         });
-        const contentBox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
-            spacing: 16,
-            margin_top: 16,
-            margin_bottom: 16,
-            margin_start: 16,
-            margin_end: 16,
-        });
-        scrolled.set_child(contentBox);
-
-        stack.add_titled(scrolled, 'apps', _('应用'));
-        stack.get_page(scrolled).icon_name = 'application-x-executable-symbolic';
+        window.add(page);
 
         const appsGroup = new Adw.PreferencesGroup({
             title: _('已扫描的应用'),
             description: _('管理已发现的 AppImage 应用，可修改显示名称、启动命令和颜色'),
         });
-        contentBox.append(appsGroup);
+        page.add(appsGroup);
 
         const listBox = new Gtk.ListBox({
             selection_mode: Gtk.SelectionMode.NONE,
@@ -308,7 +278,7 @@ export default class AppImagesPreferences extends ExtensionPreferences {
             css_classes: ['dim-label', 'caption'],
             margin_top: 8,
         });
-        contentBox.append(infoLabel);
+        page.add(infoLabel);
     }
 
     _getSettings() {
