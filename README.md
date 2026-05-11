@@ -1,17 +1,17 @@
-# AppImage Manager for GNOME Shell
+# 应用启动器 for GNOME Shell
 
-A GNOME Shell extension to manage and quickly launch your AppImage applications from the top panel.
+A GNOME Shell extension to manage and quickly launch your AppImage and executable applications from the top panel.
 
 ## Features
 
-- **Scan Directories**: Configure one or more directories to scan for `.AppImage` files. Supports `~/` and environment variables like `$HOME`.
+- **Scan Directories**: Configure one or more directories to scan for `.AppImage` files and executables. Supports `~/` and environment variables like `$HOME`.
 - **Top Panel Menu**: Click the panel icon to open a menu with search, app list, and refresh tools.
-- **Search**: Filter your AppImage applications in real-time.
+- **Search**: Filter your applications in real-time.
 - **Launch**: Left-click an app to run it (automatically checks and fixes execute permissions).
 - **Edit**: Right-click an app to edit its display name, launch command, and label color.
 - **Settings UI**: GTK4/Adwaita preferences window with two tabs:
   - **Scan**: Manage scan directories (add, remove, enable/disable).
-  - **Apps**: View and edit all discovered AppImages.
+  - **Apps**: View and edit all discovered apps.
 
 ## Installation
 

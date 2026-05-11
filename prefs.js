@@ -153,7 +153,7 @@ export default class AppImagesPreferences extends ExtensionPreferences {
 
         const dirsGroup = new Adw.PreferencesGroup({
             title: _('扫描目录'),
-            description: _('配置需要扫描 AppImage 的目录，支持 ~/ 和环境变量'),
+            description: _('配置需要扫描的目录（AppImage 和可执行文件），支持 ~/ 和环境变量'),
         });
         page.add(dirsGroup);
 
@@ -254,7 +254,7 @@ export default class AppImagesPreferences extends ExtensionPreferences {
 
         const appsGroup = new Adw.PreferencesGroup({
             title: _('已扫描的应用'),
-            description: _('管理已发现的 AppImage 应用，可修改显示名称、启动命令和颜色'),
+            description: _('管理已发现的应用（AppImage 和可执行文件），可修改显示名称、启动命令和颜色'),
         });
         page.add(appsGroup);
 

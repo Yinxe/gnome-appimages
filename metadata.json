@@ -1,6 +1,6 @@
 {
-  "name": "AppImage Manager",
-  "description": "管理和快速启动 AppImage 应用",
+  "name": "应用启动器",
+  "description": "管理和快速启动 AppImage 及可执行应用",
   "uuid": "appimages@yinxin",
   "settings-schema": "org.gnome.shell.extensions.appimages",
   "shell-version": [

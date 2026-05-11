@@ -15,7 +15,7 @@ import {AppImageEditDialog} from './lib/editDialog.js';
 const AppImageIndicator = GObject.registerClass(
 class AppImageIndicator extends PanelMenu.Button {
     _init(extension) {
-        super._init(0.0, _('AppImage Manager'), false);
+        super._init(0.0, _('应用启动器'), false);
 
         this._extension = extension;
         this._settings = extension.getSettings();
@@ -55,7 +55,7 @@ class AppImageIndicator extends PanelMenu.Button {
         });
 
         this._searchEntry = new St.Entry({
-            hint_text: _('搜索 AppImage...'),
+            hint_text: _('搜索应用...'),
             style_class: 'appimage-search-entry',
             style: 'min-width: 280px; margin: 8px; padding: 6px;',
             can_focus: true,
@@ -105,7 +105,7 @@ class AppImageIndicator extends PanelMenu.Button {
 
         if (filtered.length === 0) {
             const emptyItem = new PopupMenu.PopupMenuItem(
-                this._searchText ? _('未找到匹配的 AppImage') : _('暂无 AppImage'),
+                this._searchText ? _('未找到匹配的应用') : _('暂无应用'),
                 {reactive: false}
             );
             emptyItem.setSensitive(false);
@@ -129,7 +129,9 @@ class AppImageIndicator extends PanelMenu.Button {
         });
 
         const icon = new St.Icon({
-            icon_name: 'application-x-executable-symbolic',
+            icon_name: app.type === 'executable'
+                ? 'text-x-script-symbolic'
+                : 'application-x-executable-symbolic',
             style_class: 'popup-menu-icon',
         });
         box.add_child(icon);
@@ -214,7 +216,10 @@ class AppImageIndicator extends PanelMenu.Button {
         this._manager.syncWithScanResults(results);
         this._loadAppImages();
 
-        Main.notify(_('AppImage'), _('扫描完成，发现 %d 个应用').format(results.length));
+        const appCount = results.filter(r => r.type === 'appimage').length;
+        const execCount = results.filter(r => r.type === 'executable').length;
+        Main.notify(_('应用启动器'),
+            _('扫描完成：%d 个 AppImage, %d 个可执行文件').format(appCount, execCount));
     }
 
     destroy() {
